@@ -1,0 +1,567 @@
+/* ============================================================
+   Telecel Ghana – Instant Ready Loan | Shared Stylesheet
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --red:        #e00a1c;
+  --red-dark:   #b80818;
+  --red-light:  #ff1a2e;
+  --red-glow:   rgba(224, 10, 28, 0.18);
+  --dark-bg:    #0a0a0f;
+  --card-bg:    #13131a;
+  --card-border:#1e1e2e;
+  --surface:    #1a1a26;
+  --surface2:   #22223a;
+  --text:       #f4f4f8;
+  --text-muted: #8888aa;
+  --text-dim:   #555570;
+  --white:      #ffffff;
+  --success:    #22c55e;
+  --radius:     14px;
+  --radius-sm:  8px;
+  --shadow:     0 4px 32px rgba(0,0,0,0.55);
+  --transition: 0.22s cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--dark-bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+a { color: var(--red); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--red-light); }
+
+/* ── HEADER ────────────────────────────────────────── */
+header {
+  background: rgba(10,10,15,0.96);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--white);
+  letter-spacing: -0.3px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--red);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+}
+
+.logo span.accent { color: var(--red); }
+
+.header-badge {
+  font-size: 0.72rem;
+  background: var(--red-glow);
+  color: var(--red-light);
+  border: 1px solid rgba(224,10,28,0.35);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ── MAIN ──────────────────────────────────────────── */
+main { flex: 1; }
+
+/* ── HERO ──────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #0f0f18 0%, #16101a 50%, #0a0a0f 100%);
+  padding: 72px 24px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(224,10,28,0.13) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--red-light);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  background: rgba(224,10,28,0.1);
+  border: 1px solid rgba(224,10,28,0.25);
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.8px;
+  margin-bottom: 16px;
+  color: var(--white);
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--red);
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* ── CARDS ─────────────────────────────────────────── */
+.section {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red), var(--red-light));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-title .icon {
+  width: 32px; height: 32px;
+  background: var(--red-glow);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+  border: 1px solid rgba(224,10,28,0.25);
+}
+
+/* ── FORM ELEMENTS ─────────────────────────────────── */
+.form-group {
+  margin-bottom: 22px;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+select {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  font-size: 1rem;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--red-glow);
+}
+
+input::placeholder { color: var(--text-dim); }
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '▾';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 0.9rem;
+}
+
+select { cursor: pointer; }
+select option { background: var(--card-bg); }
+
+/* Radio term buttons */
+.term-group { display: flex; gap: 10px; }
+
+.term-btn {
+  flex: 1;
+  padding: 11px 0;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--card-border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+}
+
+.term-btn:hover {
+  border-color: var(--red);
+  color: var(--text);
+}
+
+.term-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+  box-shadow: 0 0 12px rgba(224,10,28,0.3);
+}
+
+/* ── BUTTONS ───────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 15px 24px;
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: none;
+  letter-spacing: 0.2px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--red), var(--red-light));
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(224,10,28,0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(224,10,28,0.5);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1.5px solid var(--card-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text-muted);
+  background: var(--surface2);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--red);
+  border: 1.5px solid var(--red);
+}
+
+.btn-outline:hover {
+  background: var(--red-glow);
+}
+
+/* ── ESTIMATE BOX ──────────────────────────────────── */
+.estimate-box {
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(224,10,28,0.06) 100%);
+  border: 1px solid rgba(224,10,28,0.25);
+  border-radius: var(--radius-sm);
+  padding: 20px 22px;
+  margin: 22px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.estimate-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.estimate-label strong {
+  display: block;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  margin-top: 2px;
+}
+
+.estimate-note {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* ── FEATURE PILLS ─────────────────────────────────── */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.feature-card:hover {
+  border-color: rgba(224,10,28,0.35);
+  transform: translateY(-3px);
+}
+
+.feature-icon {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.feature-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.feature-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── STEPS / PROGRESS ──────────────────────────────── */
+.steps-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 36px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--card-border);
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.step.active { color: var(--white); }
+.step.active .step-num {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+  box-shadow: 0 0 12px rgba(224,10,28,0.4);
+}
+
+.step.done .step-num {
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--white);
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--card-border);
+  margin: 0 8px;
+  min-width: 32px;
+}
+
+.step-line.done { background: var(--success); }
+
+/* ── INFO ROWS ─────────────────────────────────────── */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.9rem;
+}
+
+.info-row:last-child { border-bottom: none; }
+.info-row .info-key { color: var(--text-muted); }
+.info-row .info-val { font-weight: 600; color: var(--white); }
+.info-row .info-val.highlight { color: var(--red-light); }
+
+/* ── SUCCESS STATE ─────────────────────────────────── */
+.success-badge {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, #166534, #15803d);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  margin: 0 auto 20px;
+  box-shadow: 0 0 30px rgba(34,197,94,0.3);
+}
+
+.success-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.success-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+/* ── FOOTER ────────────────────────────────────────── */
+footer {
+  background: var(--card-bg);
+  border-top: 1px solid var(--card-border);
+  padding: 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+footer strong { color: var(--text-muted); font-weight: 600; }
+
+/* ── UTILITIES ─────────────────────────────────────── */
+.mt-4  { margin-top: 16px; }
+.mt-6  { margin-top: 24px; }
+.mt-8  { margin-top: 32px; }
+.mb-4  { margin-bottom: 16px; }
+.mb-6  { margin-bottom: 24px; }
+.text-center { text-align: center; }
+.text-sm { font-size: 0.85rem; }
+.text-muted { color: var(--text-muted); }
+.text-red { color: var(--red-light); }
+.divider {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: 24px 0;
+}
+
+/* ── ANIMATIONS ────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up { animation: fadeUp 0.5s ease both; }
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+
+/* ── RESPONSIVE ────────────────────────────────────── */
+@media (max-width: 640px) {
+  .hero { padding: 48px 20px 40px; }
+  .card { padding: 26px 20px; }
+  .term-group { flex-direction: column; }
+  .term-btn { padding: 12px; }
+  .estimate-box { flex-direction: column; }
+  .features { grid-template-columns: 1fr; }
+  .header-badge { display: none; }
+}

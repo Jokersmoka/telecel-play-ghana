@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instant Ready Loan on Telecel Cash</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23e00a1c'/><text y='22' x='5' font-size='18' font-family='Arial' fill='white' font-weight='bold'>T</text></svg>" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">&#9654;</div>
+        Telecel<span class="accent">Play</span>
+      </a>
+      <span class="header-badge">play.telecel.com.gh</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-tag">&#9889; Telecel Cash Service</div>
+      <h1 class="fade-up">Instant Ready Loan<br>on <em>Telecel Cash</em></h1>
+      <p class="fade-up delay-1">Receive a quick loan to your Telecel Cash wallet with fast approval and secure processing.</p>
+    </section>
+
+    <!-- ESTIMATOR -->
+    <section class="section">
+
+      <div class="card fade-up delay-2">
+        <div class="card-title">
+          <div class="icon">&#128202;</div>
+          Estimate Loan &amp; Repayment
+        </div>
+
+        <div class="form-group">
+          <label for="loanAmount">Loan Amount (GH&#8373;)</label>
+          <input type="number" id="loanAmount" placeholder="e.g. 5000" value="5000" min="100" max="50000" />
+        </div>
+
+        <div class="form-group">
+          <label>Loan Term (days)</label>
+          <div class="term-group">
+            <button class="term-btn" data-days="30">30 days</button>
+            <button class="term-btn active" data-days="60">60 days</button>
+            <button class="term-btn" data-days="90">90 days</button>
+          </div>
+        </div>
+
+        <div class="estimate-box">
+          <div class="estimate-label">
+            Estimated Total Repayment<br>
+            <span style="font-size:0.75rem;color:var(--text-dim);">(Principal + prorated 8.9% fee)</span>
+          </div>
+          <strong id="estimateVal" style="font-size:1.55rem;font-weight:800;color:var(--white);letter-spacing:-0.5px;">GH&#8373;5,445.00</strong>
+        </div>
+
+        <div class="estimate-note">
+          Estimate only. Actual terms: 8.9% fee; eligibility-based.
+        </div>
+
+        <div class="mt-6">
+          <button class="btn btn-primary" id="applyBtn">Apply Now &#8594;</button>
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+      <div class="features fade-up delay-3">
+        <div class="feature-card">
+          <span class="feature-icon">&#9889;</span>
+          <div class="feature-title">Fast Approval</div>
+          <div class="feature-desc">Often instant for eligible users</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">&#128176;</span>
+          <div class="feature-title">8.9% Monthly Fee</div>
+          <div class="feature-desc">Transparent &amp; competitive</div>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">&#128274;</span>
+          <div class="feature-title">Secure Wallet</div>
+          <div class="feature-desc">Protected transactions</div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <strong>&copy; 2026 Telecel Ghana</strong> &ndash; Licensed Mobile Financial Services<br>
+    Powered by Telecel Cash &amp; Telecel Play
+  </footer>
+
+  <script>
+    const MONTHLY_FEE = 0.089;
+    let selectedDays = 60;
+
+    const loanInput  = document.getElementById('loanAmount');
+    const estimateEl = document.getElementById('estimateVal');
+    const termBtns   = document.querySelectorAll('.term-btn');
+    const applyBtn   = document.getElementById('applyBtn');
+
+    function formatGHS(val) {
+      return 'GH\u20B5' + val.toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function calcRepayment() {
+      const principal = parseFloat(loanInput.value) || 0;
+      const months    = selectedDays / 30;
+      const fee       = principal * MONTHLY_FEE * months;
+      estimateEl.textContent = formatGHS(principal + fee);
+    }
+
+    termBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        termBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedDays = parseInt(btn.dataset.days);
+        calcRepayment();
+      });
+    });
+
+    loanInput.addEventListener('input', calcRepayment);
+
+    applyBtn.addEventListener('click', () => {
+      const amount = parseFloat(loanInput.value) || 0;
+      if (amount < 100) {
+        loanInput.style.borderColor = 'var(--red-light)';
+        loanInput.focus();
+        return;
+      }
+      sessionStorage.setItem('loan_amount', amount);
+      sessionStorage.setItem('loan_days',   selectedDays);
+      window.location.href = 'apply.html';
+    });
+
+    calcRepayment();
+  </script>
+</body>
+</html>

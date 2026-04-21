@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply for Loan – Telecel Cash</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23e00a1c'/><text y='22' x='5' font-size='18' font-family='Arial' fill='white' font-weight='bold'>T</text></svg>" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">&#9654;</div>
+        Telecel<span class="accent">Play</span>
+      </a>
+      <span class="header-badge">play.telecel.com.gh</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" style="padding:40px 24px 32px;">
+      <div class="hero-tag">&#128203; Loan Application</div>
+      <h1 class="fade-up" style="font-size:clamp(1.5rem,3.5vw,2.2rem);">Complete Your Application</h1>
+      <p class="fade-up delay-1" style="font-size:0.95rem;">Fill in your details below. Your Telecel Cash number will receive the funds.</p>
+    </section>
+
+    <section class="section" style="padding-top:32px;">
+
+      <!-- PROGRESS STEPS -->
+      <div class="steps-bar fade-up">
+        <div class="step done">
+          <div class="step-num">&#10003;</div>
+          <span>Estimate</span>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step active">
+          <div class="step-num">2</div>
+          <span>Apply</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <span>Confirm</span>
+        </div>
+      </div>
+
+      <!-- LOAN SUMMARY PILL -->
+      <div id="loanSummary" class="estimate-box fade-up delay-1" style="margin-bottom:24px;">
+        <div class="estimate-label">Loan Amount</div>
+        <strong id="summaryAmount" style="font-size:1.25rem;font-weight:800;color:var(--white);">GH&#8373;5,000.00</strong>
+        <div class="estimate-label" style="margin-left:auto;padding-left:20px;">Term</div>
+        <strong id="summaryTerm" style="font-size:1.25rem;font-weight:800;color:var(--red-light);">60 days</strong>
+      </div>
+
+      <!-- APPLICATION FORM -->
+      <div class="card fade-up delay-2">
+        <div class="card-title">
+          <div class="icon">&#128100;</div>
+          Personal Information
+        </div>
+
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="As registered on Telecel" />
+        </div>
+
+        <div class="form-group">
+          <label for="telecelNumber">Telecel Cash Number</label>
+          <input type="tel" id="telecelNumber" placeholder="05X XXX XXXX" maxlength="10" />
+        </div>
+
+        <div class="form-group">
+          <label for="idType">ID Type</label>
+          <div class="select-wrapper">
+            <select id="idType">
+              <option value="">Select ID type</option>
+              <option value="ghana-card">Ghana Card</option>
+              <option value="voters-id">Voter's ID</option>
+              <option value="passport">Passport</option>
+              <option value="drivers-license">Driver's License</option>
+              <option value="ssnit">SSNIT Card</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="idNumber">ID Number</label>
+          <input type="text" id="idNumber" placeholder="Enter ID number" />
+        </div>
+
+        <div class="form-group">
+          <label for="employment">Employment Status</label>
+          <div class="select-wrapper">
+            <select id="employment">
+              <option value="">Select status</option>
+              <option value="employed">Employed</option>
+              <option value="self-employed">Self-Employed</option>
+              <option value="student">Student</option>
+              <option value="unemployed">Unemployed</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="text-transform:none;letter-spacing:0;font-size:0.82rem;font-weight:400;color:var(--text-dim);line-height:1.6;">
+            By proceeding, you agree to Telecel Ghana's loan terms and conditions. Your Telecel Cash transaction history will be used to assess eligibility.
+          </label>
+        </div>
+
+        <div id="errorMsg" style="display:none;margin-top:14px;padding:10px 14px;background:rgba(224,10,28,0.1);border:1px solid rgba(224,10,28,0.3);border-radius:8px;font-size:0.85rem;color:var(--red-light);"></div>
+
+        <div class="mt-6" style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="index.html" class="btn btn-secondary" style="flex:1;min-width:120px;">&#8592; Back</a>
+          <button class="btn btn-primary" id="submitBtn" style="flex:2;min-width:180px;">
+            Review Application &#8594;
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <strong>&copy; 2026 Telecel Ghana</strong> &ndash; Licensed Mobile Financial Services<br>
+    Powered by Telecel Cash &amp; Telecel Play
+  </footer>
+
+  <script>
+    // Pull saved values from session
+    const amount = parseFloat(sessionStorage.getItem('loan_amount')) || 5000;
+    const days   = parseInt(sessionStorage.getItem('loan_days'))     || 60;
+
+    function formatGHS(v) {
+      return 'GH\u20B5' + v.toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    document.getElementById('summaryAmount').textContent = formatGHS(amount);
+    document.getElementById('summaryTerm').textContent   = days + ' days';
+
+    // Validation & submission
+    const fields = {
+      fullName:      document.getElementById('fullName'),
+      telecelNumber: document.getElementById('telecelNumber'),
+      idType:        document.getElementById('idType'),
+      idNumber:      document.getElementById('idNumber'),
+      employment:    document.getElementById('employment'),
+    };
+    const errorMsg  = document.getElementById('errorMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    submitBtn.addEventListener('click', () => {
+      errorMsg.style.display = 'none';
+
+      if (!fields.fullName.value.trim()) {
+        showError('Please enter your full name.'); fields.fullName.focus(); return;
+      }
+      const phone = fields.telecelNumber.value.replace(/\s/g,'');
+      if (!/^(05\d{8})$/.test(phone)) {
+        showError('Enter a valid 10-digit Telecel number starting with 05.'); fields.telecelNumber.focus(); return;
+      }
+      if (!fields.idType.value) {
+        showError('Please select an ID type.'); return;
+      }
+      if (!fields.idNumber.value.trim()) {
+        showError('Please enter your ID number.'); fields.idNumber.focus(); return;
+      }
+      if (!fields.employment.value) {
+        showError('Please select your employment status.'); return;
+      }
+
+      // Save form data
+      sessionStorage.setItem('app_name',       fields.fullName.value.trim());
+      sessionStorage.setItem('app_phone',      phone);
+      sessionStorage.setItem('app_id_type',    fields.idType.options[fields.idType.selectedIndex].text);
+      sessionStorage.setItem('app_id_number',  fields.idNumber.value.trim());
+      sessionStorage.setItem('app_employment', fields.employment.options[fields.employment.selectedIndex].text);
+
+      window.location.href = 'confirm.html';
+    });
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm Application – Telecel Cash</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23e00a1c'/><text y='22' x='5' font-size='18' font-family='Arial' fill='white' font-weight='bold'>T</text></svg>" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    /* Confirm-page extras */
+    #reviewView, #successView { transition: opacity 0.4s ease; }
+    #successView { display: none; }
+
+    .confirm-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .ref-box {
+      background: var(--surface);
+      border: 1px dashed var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin: 16px 0;
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 20px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    .timeline-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 30px;
+      bottom: 0;
+      width: 2px;
+      background: var(--card-border);
+    }
+
+    .tl-dot {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--card-border);
+      display: grid;
+      place-items: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .tl-dot.done { background: var(--success); border-color: var(--success); }
+    .tl-dot.active { background: var(--red); border-color: var(--red); box-shadow: 0 0 10px rgba(224,10,28,0.4); }
+
+    .tl-content { padding-top: 4px; }
+    .tl-title { font-weight: 600; font-size: 0.9rem; color: var(--white); }
+    .tl-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">&#9654;</div>
+        Telecel<span class="accent">Play</span>
+      </a>
+      <span class="header-badge">play.telecel.com.gh</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" style="padding:40px 24px 32px;">
+      <div class="hero-tag">&#9989; Review &amp; Confirm</div>
+      <h1 class="fade-up" style="font-size:clamp(1.5rem,3.5vw,2.2rem);">Review Your Application</h1>
+      <p class="fade-up delay-1" style="font-size:0.95rem;">Please verify your details before submitting.</p>
+    </section>
+
+    <section class="section" style="padding-top:32px;">
+
+      <!-- PROGRESS STEPS -->
+      <div class="steps-bar fade-up">
+        <div class="step done">
+          <div class="step-num">&#10003;</div>
+          <span>Estimate</span>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step done">
+          <div class="step-num">&#10003;</div>
+          <span>Apply</span>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step active">
+          <div class="step-num">3</div>
+          <span>Confirm</span>
+        </div>
+      </div>
+
+      <!-- REVIEW VIEW -->
+      <div id="reviewView">
+
+        <!-- Loan Details -->
+        <div class="card fade-up delay-1">
+          <div class="card-title">
+            <div class="icon">&#128202;</div>
+            Loan Details
+          </div>
+
+          <div class="info-row">
+            <span class="info-key">Loan Amount</span>
+            <span class="info-val highlight" id="revAmount">GH&#8373;5,000.00</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Loan Term</span>
+            <span class="info-val" id="revTerm">60 days</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Monthly Fee Rate</span>
+            <span class="info-val">8.9%</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Total Repayment</span>
+            <span class="info-val highlight" id="revTotal">GH&#8373;5,890.00</span>
+          </div>
+        </div>
+
+        <!-- Personal Details -->
+        <div class="card fade-up delay-2" style="margin-top:16px;">
+          <div class="card-title">
+            <div class="icon">&#128100;</div>
+            Personal Details
+          </div>
+
+          <div class="info-row">
+            <span class="info-key">Full Name</span>
+            <span class="info-val" id="revName">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Telecel Cash No.</span>
+            <span class="info-val" id="revPhone">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">ID Type</span>
+            <span class="info-val" id="revIdType">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">ID Number</span>
+            <span class="info-val" id="revIdNum">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Employment</span>
+            <span class="info-val" id="revEmployment">—</span>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="card fade-up delay-3" style="margin-top:16px;background:rgba(224,10,28,0.05);border-color:rgba(224,10,28,0.2);">
+          <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.65;">
+            By confirming, you authorise Telecel Ghana to disburse the requested loan to your Telecel Cash wallet. Repayment will be due within the selected term. Late repayment may attract additional charges and affect future eligibility.
+          </p>
+        </div>
+
+        <div class="mt-6" style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="apply.html" class="btn btn-secondary" style="flex:1;min-width:120px;">&#8592; Edit</a>
+          <button class="btn btn-primary" id="confirmBtn" style="flex:2;min-width:180px;">
+            Confirm &amp; Submit &#10003;
+          </button>
+        </div>
+
+      </div>
+
+      <!-- SUCCESS VIEW -->
+      <div id="successView">
+        <div class="card fade-up" style="text-align:center;padding:48px 28px;">
+          <div class="success-badge">&#10003;</div>
+          <div class="success-title">Application Submitted!</div>
+          <div class="success-sub">
+            Your loan request has been received and is being processed.<br>
+            Funds will be sent to your Telecel Cash wallet.
+          </div>
+
+          <div class="ref-box">
+            Ref: <span id="refCode">TCL-XXXXXXXX</span>
+          </div>
+
+          <!-- Processing Timeline -->
+          <div class="timeline" style="text-align:left;max-width:340px;margin:0 auto;">
+            <div class="timeline-item">
+              <div class="tl-dot done">&#10003;</div>
+              <div class="tl-content">
+                <div class="tl-title">Application Received</div>
+                <div class="tl-desc">Your details have been recorded</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot active" id="tl2">&#8226;</div>
+              <div class="tl-content">
+                <div class="tl-title">Eligibility Check</div>
+                <div class="tl-desc">Reviewing Telecel Cash history</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-dot" id="tl3">3</div>
+              <div class="tl-content">
+                <div class="tl-title">Disbursement</div>
+                <div class="tl-desc">Funds sent to your wallet</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:32px;font-size:0.82rem;color:var(--text-dim);">
+            You will receive an SMS confirmation shortly.<br>
+            For support, dial <strong style="color:var(--text-muted);">100</strong> on your Telecel line.
+          </div>
+
+          <div class="mt-6" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <a href="index.html" class="btn btn-secondary" style="max-width:220px;">&#8592; Back to Home</a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <strong>&copy; 2026 Telecel Ghana</strong> &ndash; Licensed Mobile Financial Services<br>
+    Powered by Telecel Cash &amp; Telecel Play
+  </footer>
+
+  <script>
+    const MONTHLY_FEE = 0.089;
+
+    function formatGHS(v) {
+      return 'GH\u20B5' + v.toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Populate review
+    const amount     = parseFloat(sessionStorage.getItem('loan_amount')) || 5000;
+    const days       = parseInt(sessionStorage.getItem('loan_days'))     || 60;
+    const months     = days / 30;
+    const total      = amount + (amount * MONTHLY_FEE * months);
+
+    document.getElementById('revAmount').textContent     = formatGHS(amount);
+    document.getElementById('revTerm').textContent       = days + ' days';
+    document.getElementById('revTotal').textContent      = formatGHS(total);
+    document.getElementById('revName').textContent       = sessionStorage.getItem('app_name')       || '—';
+    document.getElementById('revPhone').textContent      = sessionStorage.getItem('app_phone')      || '—';
+    document.getElementById('revIdType').textContent     = sessionStorage.getItem('app_id_type')    || '—';
+    document.getElementById('revIdNum').textContent      = sessionStorage.getItem('app_id_number')  || '—';
+    document.getElementById('revEmployment').textContent = sessionStorage.getItem('app_employment') || '—';
+
+    // Confirm submission
+    const confirmBtn  = document.getElementById('confirmBtn');
+    const reviewView  = document.getElementById('reviewView');
+    const successView = document.getElementById('successView');
+
+    confirmBtn.addEventListener('click', () => {
+      // Loading state
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = '<span class="spinner"></span> Processing...';
+
+      setTimeout(() => {
+        // Generate ref number
+        const ref = 'TCL-' + Math.random().toString(36).substr(2,8).toUpperCase();
+        document.getElementById('refCode').textContent = ref;
+
+        // Show success
+        reviewView.style.opacity = '0';
+        setTimeout(() => {
+          reviewView.style.display   = 'none';
+          successView.style.display  = 'block';
+          successView.style.opacity  = '0';
+          requestAnimationFrame(() => {
+            successView.style.opacity = '1';
+            successView.style.transition = 'opacity 0.5s ease';
+          });
+
+          // Animate timeline steps
+          setTimeout(() => {
+            const tl2 = document.getElementById('tl2');
+            const tl3 = document.getElementById('tl3');
+            tl2.classList.remove('active');
+            tl2.classList.add('done');
+            tl2.textContent = '\u2713';
+            setTimeout(() => {
+              tl3.classList.add('done');
+              tl3.textContent = '\u2713';
+            }, 1400);
+          }, 1200);
+
+          // Clear session storage
+          sessionStorage.clear();
+        }, 350);
+      }, 2200);
+    });
+  </script>
+</body>
+</html>

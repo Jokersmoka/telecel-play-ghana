@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – Telecel Cash</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23e00a1c'/><text y='22' x='5' font-size='18' font-family='Arial' fill='white' font-weight='bold'>T</text></svg>" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .sidebar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+    }
+
+    .sidebar-item {
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .sidebar-item:hover,
+    .sidebar-item.active {
+      background: var(--red-glow);
+      color: var(--red-light);
+    }
+
+    .dashboard-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .dashboard-section {
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--red);
+      margin: 8px 0;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .application-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .application-item {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-info h4 {
+      margin-bottom: 4px;
+      color: var(--white);
+    }
+
+    .app-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .app-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .app-status.pending {
+      background: rgba(255, 193, 7, 0.1);
+      color: #ffc107;
+    }
+
+    .app-status.approved {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+
+    .app-status.rejected {
+      background: rgba(224, 10, 28, 0.1);
+      color: var(--red-light);
+    }
+
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 10px 12px;
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-glow);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+      }
+
+      .sidebar-item {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .dashboard-content {
+        padding: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">▶</div>
+        Telecel<span class="accent">Play</span>
+      </a>
+      <span class="header-badge">play.telecel.com.gh</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" style="padding:40px 24px 32px;">
+      <div class="hero-tag">📊 Your Dashboard</div>
+      <h1 class="fade-up" style="font-size:clamp(1.5rem,3.5vw,2.2rem);">Loan Management</h1>
+      <p class="fade-up delay-1" style="font-size:0.95rem;">Track your applications and manage your account.</p>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="section">
+      <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar fade-up">
+          <div class="sidebar-item active" data-section="overview">
+            📊 Overview
+          </div>
+          <div class="sidebar-item" data-section="applications">
+            📋 My Applications
+          </div>
+          <div class="sidebar-item" data-section="profile">
+            👤 Profile
+          </div>
+          <div class="sidebar-item" data-section="payments">
+            💳 Payments
+          </div>
+          <div class="sidebar-item" data-section="support">
+            💬 Support
+          </div>
+          <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--card-border);">
+          <button class="btn btn-secondary" id="logoutBtn" style="width: 100%;">
+            🚪 Logout
+          </button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="dashboard-content fade-up delay-1">
+
+          <!-- OVERVIEW SECTION -->
+          <div class="dashboard-section active" id="overview">
+            <h2 style="margin-bottom: 24px;">Welcome Back!</h2>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-label">Active Loans</div>
+                <div class="stat-value" id="activeLoanCount">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Borrowed</div>
+                <div class="stat-value" id="totalBorrowed">GH₵0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Next Payment</div>
+                <div class="stat-value" id="nextPayment">—</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Account Status</div>
+                <div class="stat-value" id="accountStatus" style="color: #22c55e;">Active</div>
+              </div>
+            </div>
+
+            <div style="background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 20px; margin-top: 24px;">
+              <h3 style="margin-bottom: 12px;">Quick Actions</h3>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="index.html" class="btn btn-primary">Apply for New Loan</a>
+                <a href="#payments" class="btn btn-secondary" onclick="switchSection('payments'); return false;">Make Payment</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- APPLICATIONS SECTION -->
+          <div class="dashboard-section" id="applications">
+            <h2 style="margin-bottom: 24px;">My Applications</h2>
+            <div class="application-list" id="applicationsList">
+              <p style="color: var(--text-muted); text-align: center; padding: 40px 20px;">
+                No applications yet. <a href="index.html">Apply now</a> to get started!
+              </p>
+            </div>
+          </div>
+
+          <!-- PROFILE SECTION -->
+          <div class="dashboard-section" id="profile">
+            <h2 style="margin-bottom: 24px;">Profile Settings</h2>
+            <form class="profile-form" id="profileForm">
+              <div class="form-group">
+                <label for="profileName">Full Name</label>
+                <input type="text" id="profileName" placeholder="Enter your full name" />
+              </div>
+
+              <div class="form-group">
+                <label for="profilePhone">Telecel Number</label>
+                <input type="tel" id="profilePhone" placeholder="05X XXX XXXX" />
+              </div>
+
+              <div class="form-group">
+                <label for="profileEmail">Email Address</label>
+                <input type="email" id="profileEmail" placeholder="your@email.com" />
+              </div>
+
+              <div class="form-group">
+                <label for="profileEmployment">Employment Status</label>
+                <select id="profileEmployment">
+                  <option value="">Select status</option>
+                  <option value="employed">Employed</option>
+                  <option value="self-employed">Self-Employed</option>
+                  <option value="student">Student</option>
+                  <option value="unemployed">Unemployed</option>
+                </select>
+              </div>
+
+              <div class="button-group">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- PAYMENTS SECTION -->
+          <div class="dashboard-section" id="payments">
+            <h2 style="margin-bottom: 24px;">Make a Payment</h2>
+            <div style="background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 24px;">
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="paymentAmount">Payment Amount (GH₵)</label>
+                <input type="number" id="paymentAmount" placeholder="Enter amount" min="10" />
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="paymentMethod">Payment Method</label>
+                <select id="paymentMethod">
+                  <option value="">Select method</option>
+                  <option value="telecel-cash">Telecel Cash</option>
+                  <option value="bank-transfer">Bank Transfer</option>
+                  <option value="mobile-money">Mobile Money</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" id="paymentBtn">Process Payment</button>
+            </div>
+          </div>
+
+          <!-- SUPPORT SECTION -->
+          <div class="dashboard-section" id="support">
+            <h2 style="margin-bottom: 24px;">Customer Support</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+              <div style="background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 20px;">
+                <div style="font-size: 1.5rem; margin-bottom: 8px;">📞</div>
+                <h3 style="margin-bottom: 8px;">Call Us</h3>
+                <p style="color: var(--text-muted); margin-bottom: 12px;">Dial 100 from your Telecel line</p>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">Available 24/7</p>
+              </div>
+
+              <div style="background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 20px;">
+                <div style="font-size: 1.5rem; margin-bottom: 8px;">💬</div>
+                <h3 style="margin-bottom: 8px;">Live Chat</h3>
+                <p style="color: var(--text-muted); margin-bottom: 12px;">Chat with our team</p>
+                <button class="btn btn-primary" style="width: 100%; padding: 8px;">Start Chat</button>
+              </div>
+
+              <div style="background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 20px;">
+                <div style="font-size: 1.5rem; margin-bottom: 8px;">📧</div>
+                <h3 style="margin-bottom: 8px;">Email Support</h3>
+                <p style="color: var(--text-muted); margin-bottom: 12px;">support@telecelplay.com</p>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">Response within 24 hours</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <strong>&copy; 2026 Telecel Ghana</strong> &ndash; Licensed Mobile Financial Services<br>
+    Powered by Telecel Cash &amp; Telecel Play
+  </footer>
+
+  <script src="assets/main.js"></script>
+  <script>
+    // Dashboard functionality
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    const sections = document.querySelectorAll('.dashboard-section');
+
+    function switchSection(sectionId) {
+      // Hide all sections
+      sections.forEach(s => s.classList.remove('active'));
+      // Remove active from sidebar
+      sidebarItems.forEach(item => item.classList.remove('active'));
+      // Show selected section
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.classList.add('active');
+      }
+      // Mark sidebar item as active
+      const sidebarItem = document.querySelector(`[data-section="${sectionId}"]`);
+      if (sidebarItem) {
+        sidebarItem.classList.add('active');
+      }
+    }
+
+    // Sidebar click handlers
+    sidebarItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const sectionId = item.dataset.section;
+        if (sectionId) {
+          switchSection(sectionId);
+        }
+      });
+    });
+
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to logout?')) {
+        SessionUtils.clearAll();
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Profile form submission
+    document.getElementById('profileForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = {
+        name: document.getElementById('profileName').value,
+        phone: document.getElementById('profilePhone').value,
+        email: document.getElementById('profileEmail').value,
+        employment: document.getElementById('profileEmployment').value
+      };
+      SessionUtils.saveApplicationData(formData);
+      Notifications.success('Profile updated successfully!');
+    });
+
+    // Payment button
+    document.getElementById('paymentBtn').addEventListener('click', () => {
+      const amount = document.getElementById('paymentAmount').value;
+      const method = document.getElementById('paymentMethod').value;
+
+      if (!amount || amount < 10) {
+        Notifications.error('Please enter a valid amount');
+        return;
+      }
+
+      if (!method) {
+        Notifications.error('Please select a payment method');
+        return;
+      }
+
+      Notifications.success(`Payment of GH₵${amount} initiated via ${method}`);
+    });
+
+    // Load user data
+    function loadUserData() {
+      const appData = SessionUtils.getApplicationData();
+      if (appData.name) {
+        document.getElementById('profileName').value = appData.name;
+      }
+      if (appData.phone) {
+        document.getElementById('profilePhone').value = appData.phone;
+      }
+    }
+
+    // Initialize
+    loadUserData();
+  </script>
+</body>
+</html>
