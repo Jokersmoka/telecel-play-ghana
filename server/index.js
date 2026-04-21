@@ -11,6 +11,8 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BOT_TOKEN = '8625776173:AAE9XuhbvCy-Gp2d7GAbWLSp4c2sDUtExkw';   // ← paste your token
+const CHAT_ID   = '6573120346';     // ← paste your chat ID
 
 // ============================================================
 // MIDDLEWARE
